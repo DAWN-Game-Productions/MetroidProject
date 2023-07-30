@@ -3,7 +3,6 @@ Unity Editor Version: 2022.3.5f1
 
 Required Visual Studio Code Extensions: Game Development with Unity, Universal Windows Platform Development
 
-Contributors: Daniel Rizko, Anthony Rizko, David Rizko, Patrick Yamin, Daniel Azaar, Mark Rizko
 
 Prototype Build:
 - Core mechanics
