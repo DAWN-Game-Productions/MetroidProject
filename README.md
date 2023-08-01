@@ -7,10 +7,8 @@ Required Visual Studio Code Extensions: Game Development with Unity, Universal W
 Prototype Build:
 - Core mechanics
 - Level design finalized but only 2 rooms necessary
-- 3 Different enemy types and behaviors
-- Crooked Meter
-- A single boss and boss mechanics
-- War Gear/Weapons(4 different war gear[abilities], 3 different weapons) 
+- A single enemy and scripted behaviour
+- A single weapon and special
 - Combat Mechanics
 
 
