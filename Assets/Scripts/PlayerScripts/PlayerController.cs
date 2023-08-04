@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     private bool grounded;
     private float horizontal;
     private float moveSpeed = 10f;
-    private float jumpVelocity = 5.5f;
+    private float jumpVelocity = 10f;
+    private float vertical; // for camera
     // will use later to flip player sprite depending on direction
     bool isFacingRight = true;
 
@@ -34,30 +35,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        
-        
-
+        // update velocity based on horizontal component
         rb2D.velocity = new Vector2(horizontal * moveSpeed, rb2D.velocity.y);
-        /*
-        if(grounded && Input.GetKeyDown(KeyCode.Space)){
-            rb2D.velocity = Vector2.up * jumpVelocity;
-        }
+        mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, new Vector3(player.transform.position.x, vertical, mainCam.transform.position.z), 0.02f);
 
-        // Smooth look up and down camera movements
-        bool isMoving = rb2D.velocity != Vector2.zero;
-        if (grounded && !isMoving && Input.GetKey(KeyCode.W))
-        {
-            mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, new Vector3(mainCam.transform.position.x, player.transform.position.y + 5f, mainCam.transform.position.z), 0.02f);
-        }
-        else if (grounded && !isMoving && Input.GetKey(KeyCode.S))
-        {
-            mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, new Vector3(mainCam.transform.position.x, player.transform.position.y - 5f, mainCam.transform.position.z), 0.02f);
-        }
-        else
-        {
-            mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, new Vector3(player.transform.position.x, player.transform.position.y, mainCam.transform.position.z), 0.02f);
-        }
-        */
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
@@ -84,10 +65,27 @@ public class PlayerController : MonoBehaviour
             rb2D.velocity = new Vector2(rb2D.velocity.x, jumpVelocity);
         }
 
+
+        // Adds functionality for variable jump (if you hold space you jump higher)
         if (context.canceled && rb2D.velocity.y > 0f)
         {
             rb2D.velocity = new Vector2(rb2D.velocity.x, rb2D.velocity.y * 0.5f);
         }
+    }
+
+    public void Look(InputAction.CallbackContext context)
+    {
+        // Smooth look up and down camera movements
+        bool isMoving = rb2D.velocity != Vector2.zero;
+        if (grounded && !isMoving)
+        {
+            vertical = context.ReadValue<Vector2>().y * 5f;
+        }
+        else
+        {
+            vertical = player.transform.position.y;
+        }
+        
     }
 
 }
