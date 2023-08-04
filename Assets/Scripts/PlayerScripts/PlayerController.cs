@@ -26,8 +26,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        mainCam.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, mainCam.transform.position.z);
-
         float moveSpeed = 10f;
         float jumpVelocity = 3.5f; 
 
@@ -41,19 +39,24 @@ public class PlayerController : MonoBehaviour
             rb2D.velocity = new Vector2(0, rb2D.velocity.y);
         }
 
-        //REMOVE KEYCODE W LATER
         if(grounded && Input.GetKeyDown(KeyCode.Space)){
             rb2D.velocity = Vector2.up * jumpVelocity;
         }
-        //WORKING VERSION
-        if(Input.GetKey(KeyCode.W)){
-            mainCam.transform.position = new Vector3(mainCam.transform.position.x, mainCam.transform.position.y + 10f, mainCam.transform.position.z);
-        }
 
-        //Attempt for a gradually moving camera, I think Lerp is the key
-        // if(Input.GetKey(KeyCode.W)){
-        //     mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, new Vector3(mainCam.transform.position.x, mainCam.transform.position.y + 10f, mainCam.transform.position.z), 1f);
-        // }
+        // Smooth look up and down camera movements
+        bool isMoving = rb2D.velocity != Vector2.zero;
+        if (grounded && !isMoving && Input.GetKey(KeyCode.W))
+        {
+            mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, new Vector3(mainCam.transform.position.x, player.transform.position.y + 5f, mainCam.transform.position.z), 0.02f);
+        }
+        else if (grounded && !isMoving && Input.GetKey(KeyCode.S))
+        {
+            mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, new Vector3(mainCam.transform.position.x, player.transform.position.y - 5f, mainCam.transform.position.z), 0.02f);
+        }
+        else
+        {
+            mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, new Vector3(player.transform.position.x, player.transform.position.y, mainCam.transform.position.z), 0.02f);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
