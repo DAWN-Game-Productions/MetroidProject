@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,11 +11,18 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb2D;
     private BoxCollider2D bc2D;
     private bool grounded;
+    private float horizontal;
+    private float moveSpeed = 10f;
+    private float jumpVelocity = 5.5f;
+    // will use later to flip player sprite depending on direction
+    bool isFacingRight = true;
+
 
     //For jumping
     [SerializeField] private LayerMask platformLayerMask;
     [SerializeField] private Camera mainCam;
     [SerializeField] private GameObject player;
+
 
     private void Awake(){
         rb2D = transform.GetComponent<Rigidbody2D>();
@@ -26,19 +34,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        float moveSpeed = 10f;
-        float jumpVelocity = 3.5f; 
+        
+        
 
-        if(Input.GetKey(KeyCode.A)){
-            rb2D.velocity = new Vector2(-moveSpeed, rb2D.velocity.y);
-        }
-        else if(Input.GetKey(KeyCode.D)){
-            rb2D.velocity = new Vector2(+moveSpeed, rb2D.velocity.y);
-        }
-        else{
-            rb2D.velocity = new Vector2(0, rb2D.velocity.y);
-        }
-
+        rb2D.velocity = new Vector2(horizontal * moveSpeed, rb2D.velocity.y);
+        /*
         if(grounded && Input.GetKeyDown(KeyCode.Space)){
             rb2D.velocity = Vector2.up * jumpVelocity;
         }
@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
         {
             mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, new Vector3(player.transform.position.x, player.transform.position.y, mainCam.transform.position.z), 0.02f);
         }
+        */
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
@@ -68,6 +69,24 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionExit2D(Collision2D collision){
         if(collision.gameObject.layer == 6 && grounded){
             grounded = false;
+        }
+    }
+
+    public void Move(InputAction.CallbackContext context)
+    {
+        horizontal = context.ReadValue<Vector2>().x;
+    }
+
+    public void Jump(InputAction.CallbackContext context)
+    {
+        if (context.performed && grounded)
+        {
+            rb2D.velocity = new Vector2(rb2D.velocity.x, jumpVelocity);
+        }
+
+        if (context.canceled && rb2D.velocity.y > 0f)
+        {
+            rb2D.velocity = new Vector2(rb2D.velocity.x, rb2D.velocity.y * 0.5f);
         }
     }
 
