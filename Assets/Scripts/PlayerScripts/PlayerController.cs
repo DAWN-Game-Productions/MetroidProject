@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private float jumpVelocity = 10f;
     private float vertical; // for camera
     private bool isMoving;
+    private float verticalDeadzone = 0.6f;
     // will use later to flip player sprite depending on direction
     bool isFacingRight = true;
 
@@ -62,7 +63,14 @@ public class PlayerController : MonoBehaviour
 
     public void Move(InputAction.CallbackContext context)
     {
-        horizontal = context.ReadValue<Vector2>().x;
+        if (Mathf.Abs(context.ReadValue<Vector2>().y) > verticalDeadzone)
+        {
+            horizontal = 0f;
+        }
+        else
+        {
+            horizontal = context.ReadValue<Vector2>().x;
+        }
     }
 
     public void Jump(InputAction.CallbackContext context)
