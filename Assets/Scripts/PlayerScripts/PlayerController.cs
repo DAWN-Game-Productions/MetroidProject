@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour
     private float vertical; // for camera
     private bool isMoving;
     private float verticalDeadzone = 0.6f;
+    public int maxHealth = 100;
+    public int currentHealth;
+
+    public HealthBar healthBar;
     // will use later to flip player sprite depending on direction
     bool isFacingRight = true;
 
@@ -28,15 +32,22 @@ public class PlayerController : MonoBehaviour
 
 
     private void Awake(){
+
         rb2D = transform.GetComponent<Rigidbody2D>();
         bc2D = transform.GetComponent<BoxCollider2D>();
         
         mainCam.orthographicSize = 20f;
+
+        currentHealth = maxHealth;
+        healthBar.setMaxHealth(maxHealth);
+
     }
 
     // Update is called once per frame
     private void Update()
     {
+
+        healthBar.setHealth(currentHealth);
         // update velocity based on horizontal component
         rb2D.velocity = new Vector2(horizontal * moveSpeed, rb2D.velocity.y);
         // Smooth look up and down camera movements
