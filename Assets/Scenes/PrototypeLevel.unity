@@ -636,7 +636,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 648071330}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ledges
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -670,7 +670,7 @@ GameObject:
   m_Component:
   - component: {fileID: 743777247}
   - component: {fileID: 743777246}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ledge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1175,7 +1175,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1610860320}
   - component: {fileID: 1610860321}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ledge (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
