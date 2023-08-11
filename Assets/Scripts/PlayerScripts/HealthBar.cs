@@ -28,17 +28,24 @@ public class HealthBar : MonoBehaviour
 
     public void takeDamage(int damage){
         slider.value -= damage;
-        checkDeath();
+        Debug.Log(damage);
+        Debug.Log(slider.value);
+        //checkDeath();
     }
+
+    // public HealthBar getHealthBar(){
+    //     return this;
+    // }
 
     private void Update(){
-        checkDeath();
+        //checkDeath();
     }
+    //This might just destroy the healthbar and not the enemy object. Should be placed in the enemy script I THINK
 
-    public void checkDeath(){
-        if(slider.value <= 0){
-            Destroy(gameObject);
-            Debug.Log("Death detected");
-        }
-    }
+    // public void checkDeath(){
+    //     if(slider.value <= 0){
+    //         Destroy(gameObject);
+    //         Debug.Log("Death detected");
+    //     }
+    // }
 }

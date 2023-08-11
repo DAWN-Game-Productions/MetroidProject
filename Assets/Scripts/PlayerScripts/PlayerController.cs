@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
 
     public HealthBar healthBar;
     // will use later to flip player sprite depending on direction
-    bool isFacingRight = true;
+    //bool isFacingRight = true;
 
 
     //For jumping

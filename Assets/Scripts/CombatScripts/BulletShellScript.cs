@@ -5,40 +5,29 @@ using UnityEngine;
 public class BulletShellScript : MonoBehaviour
 {
     private float MaxLifeTime = 2f;
-    //private float Damage = 50f;
+    private int Damage = 50;
     private LayerMask EnemyLMask = 7;
+    [SerializeField] private GameObject bulletPrefab;
+    
 
     // Start is called before the first frame update
     void Start()
-    { 
+    {
         Destroy(gameObject, MaxLifeTime);  
     }
 
-    private void OnTriggerEnter (Collider other){
-        Rigidbody targetRB = other.GetComponent<Rigidbody>();
-        if(!targetRB)
-            Debug.Log("No rigid body detected on collision");
+    private void OnTriggerEnter2D (Collider2D other){
+        // Create Interface for the enemies that each different kind of enemy will implement. Change BasicAIScript to search
+        //      for said interface(Down the line, not needed right now)
+        BasicAIScript ai = other.GetComponent<BasicAIScript>();
+
+        if(!ai)
+            Debug.Log("object not found");
         
-        LayerMask lm = targetRB.GetComponent<LayerMask>();
-        // if(!lm)
-        //     Debug.Log("No layer mask detected on collision");
-
-        
-
-        // Collider target = Physics.OverlapSphere(transform.position, 0.1f, EnemyLMask)[0];
-        // Rigidbody targetRB = target.GetComponent<Rigidbody>();
-        // LayerMask lm = target.GetComponent<LayerMask>();
-
-        if(targetRB && lm == EnemyLMask){
-            HealthBar hp = targetRB.GetComponent<HealthBar>();
-            if(!hp){
-                Debug.Log("No hp");
-            }
-            else{
-                hp.takeDamage(50);
-            }
+        if(ai.gameObject.layer == EnemyLMask){
+            ai.currentHealth -= Damage;
         }        
 
-        Destroy(gameObject);
+        Destroy(bulletPrefab);
     }
 }
