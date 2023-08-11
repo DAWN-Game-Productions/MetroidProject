@@ -25,4 +25,20 @@ public class HealthBar : MonoBehaviour
     {
         slider.maxValue = health;
     }
+
+    public void takeDamage(int damage){
+        slider.value -= damage;
+        checkDeath();
+    }
+
+    private void Update(){
+        checkDeath();
+    }
+
+    public void checkDeath(){
+        if(slider.value <= 0){
+            Destroy(gameObject);
+            Debug.Log("Death detected");
+        }
+    }
 }
