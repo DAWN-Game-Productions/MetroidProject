@@ -19,16 +19,21 @@ public class PlayerController : MonoBehaviour
     private float verticalDeadzone = 0.6f;
     public int maxHealth = 100;
     public int currentHealth;
+    private int bulletCount = 9;
+    private float FireTime;
+    private bool isReloaded = true;
 
     public HealthBar healthBar;
     // will use later to flip player sprite depending on direction
-    bool isFacingRight = true;
+    //bool isFacingRight = true;
 
 
     //For jumping
     [SerializeField] private LayerMask platformLayerMask;
     [SerializeField] private Camera mainCam;
     [SerializeField] private GameObject player;
+    [SerializeField] private GameObject bullet;
+    [SerializeField] private Transform fireTrans;
 
 
     private void Awake(){
@@ -46,6 +51,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if((Time.time - FireTime) > 1f && isReloaded == false){
+            isReloaded = true;
+            bulletCount = 9;
+        }
 
         healthBar.setHealth(currentHealth);
         // update velocity based on horizontal component
@@ -108,6 +117,24 @@ public class PlayerController : MonoBehaviour
         else
         {
             vertical = player.transform.position.y;
+        }
+    }
+
+    public void SecondaryFire(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            bulletCount--;
+            if(bulletCount < 0){
+                FireTime = Time.time;
+                isReloaded = false;
+            }
+
+            if(isReloaded){
+                GameObject bulletInstance = Instantiate(bullet, fireTrans.position, fireTrans.rotation);
+            }
+            else
+                return;
         }
     }
 
