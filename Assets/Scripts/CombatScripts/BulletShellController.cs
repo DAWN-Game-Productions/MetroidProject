@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletShellScript : MonoBehaviour
+public class BulletShellController : MonoBehaviour
 {
     private float MaxLifeTime = 2f;
     private int Damage = 50;
@@ -39,7 +39,7 @@ public class BulletShellScript : MonoBehaviour
         }
         
 
-        BasicAIScript ai = other.GetComponent<BasicAIScript>();
+        BasicAIController ai = other.GetComponent<BasicAIController>();
 
         if(!ai)
             Debug.Log("object not found");

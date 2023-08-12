@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicAIScript : MonoBehaviour
+public class BasicAIController : MonoBehaviour
 {
 
     public int maxHealth = 100; // can probably get this number from somewhere else down the line
