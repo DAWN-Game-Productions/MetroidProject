@@ -18,7 +18,8 @@ public class PlayerController : MonoBehaviour
     private float verticalDeadzone = 0.6f;
     public int maxHealth = 100;
     public int currentHealth;
-    private int bulletCount = 9;
+    public int bulletsRemaining;
+    public int magSize = 9;
     private float FireTime;
     private bool isReloaded = true;
 
@@ -42,6 +43,8 @@ public class PlayerController : MonoBehaviour
         
         //mainCam.orthographicSize = 20f;
 
+        bulletsRemaining = magSize;
+
         currentHealth = maxHealth;
         healthBar.setMaxHealth(maxHealth);
 
@@ -52,7 +55,7 @@ public class PlayerController : MonoBehaviour
     {
         if((Time.time - FireTime) > 1f && isReloaded == false){
             isReloaded = true;
-            bulletCount = 9;
+            bulletsRemaining = 9;
         }
 
         healthBar.setHealth(currentHealth);
@@ -105,8 +108,8 @@ public class PlayerController : MonoBehaviour
     {
         if(context.performed)
         {
-            bulletCount--;
-            if(bulletCount < 0){
+            bulletsRemaining--;
+            if(bulletsRemaining <= 1){
                 FireTime = Time.time;
                 isReloaded = false;
             }
