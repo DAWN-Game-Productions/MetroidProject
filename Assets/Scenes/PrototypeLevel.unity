@@ -1534,6 +1534,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   remaining: {fileID: 1134494541}
   total: {fileID: 1005430831}
+  player: {fileID: 1566183733}
 --- !u!1 &1150884951
 GameObject:
   m_ObjectHideFlags: 0
