@@ -10,12 +10,11 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb2D;
     private BoxCollider2D bc2D;
-    private bool grounded;
+    public bool grounded;
     private float horizontal;
     private float moveSpeed = 10f;
     private float jumpVelocity = 10f;
-    private float vertical; // for camera
-    private bool isMoving;
+    public bool isMoving;
     private float verticalDeadzone = 0.6f;
     public int maxHealth = 100;
     public int currentHealth;
@@ -41,7 +40,7 @@ public class PlayerController : MonoBehaviour
         rb2D = transform.GetComponent<Rigidbody2D>();
         bc2D = transform.GetComponent<BoxCollider2D>();
         
-        mainCam.orthographicSize = 20f;
+        //mainCam.orthographicSize = 20f;
 
         currentHealth = maxHealth;
         healthBar.setMaxHealth(maxHealth);
@@ -61,12 +60,6 @@ public class PlayerController : MonoBehaviour
         rb2D.velocity = new Vector2(horizontal * moveSpeed, rb2D.velocity.y);
         // Smooth look up and down camera movements
         isMoving = rb2D.velocity != Vector2.zero;
-        if (isMoving)
-        {
-            vertical = player.transform.position.y;
-        }
-        mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, new Vector3(player.transform.position.x, vertical, mainCam.transform.position.z), 0.02f);
-
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
@@ -105,18 +98,6 @@ public class PlayerController : MonoBehaviour
         if (context.canceled && rb2D.velocity.y > 0f)
         {
             rb2D.velocity = new Vector2(rb2D.velocity.x, rb2D.velocity.y * 0.5f);
-        }
-    }
-
-    public void Look(InputAction.CallbackContext context)
-    {
-        if (grounded && !isMoving && context.performed)
-        {
-            vertical = context.ReadValue<Vector2>().y * 5f;
-        }
-        else
-        {
-            vertical = player.transform.position.y;
         }
     }
 
