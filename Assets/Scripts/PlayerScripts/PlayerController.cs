@@ -8,23 +8,35 @@ public class PlayerController : MonoBehaviour
 
     //private float distance = 10;
 
+    //COMPONENT GRAB
     private Rigidbody2D rb2D;
     private BoxCollider2D bc2D;
+
+    //MOVEMENT BOOLEANS
     public bool grounded;
+    public bool isMoving;
+
+    //MOVEMENT VARIABLES
     private float horizontal;
     private float moveSpeed = 10f;
     private float jumpVelocity = 10f;
-    public bool isMoving;
     private float verticalDeadzone = 0.6f;
+    
+    //HEALTH BAR
+    public HealthBar healthBar;
     public int maxHealth = 100;
     public int currentHealth;
+
+    //COMBAT VARIABLES
     public int bulletsRemaining;
     public int magSize = 9;
     private float FireTime;
     private bool isReloaded = true;
 
-    public HealthBar healthBar;
+    
     // will use later to flip player sprite depending on direction
+    enum Direction { right, left, up};
+    Direction playerDirection = Direction.right;
     //bool isFacingRight = true;
 
 
@@ -32,8 +44,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask platformLayerMask;
     [SerializeField] private Camera mainCam;
     [SerializeField] private GameObject player;
-    [SerializeField] private GameObject bullet;
-    [SerializeField] private Transform fireTrans;
+    [SerializeField] private GameObject bullet_r;
+    [SerializeField] private GameObject bullet_l;
+    [SerializeField] private Transform fireTransR;
+    [SerializeField] private Transform fireTransL;
 
 
     private void Awake(){
@@ -41,8 +55,6 @@ public class PlayerController : MonoBehaviour
         rb2D = transform.GetComponent<Rigidbody2D>();
         bc2D = transform.GetComponent<BoxCollider2D>();
         
-        //mainCam.orthographicSize = 20f;
-
         bulletsRemaining = magSize;
 
         currentHealth = maxHealth;
@@ -63,6 +75,8 @@ public class PlayerController : MonoBehaviour
         rb2D.velocity = new Vector2(horizontal * moveSpeed, rb2D.velocity.y);
         // Smooth look up and down camera movements
         isMoving = rb2D.velocity != Vector2.zero;
+
+        //Debug.Log(isFacingRight);
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
@@ -86,6 +100,22 @@ public class PlayerController : MonoBehaviour
         else
         {
             horizontal = context.ReadValue<Vector2>().x;
+            if(context.ReadValue<Vector2>().x > 0){
+                //isFacingRight = true;
+                playerDirection = Direction.right;
+            }
+            else if(context.ReadValue<Vector2>().x < 0){
+                //isFacingRight = false;
+                playerDirection = Direction.left;
+            }
+            else if(context.ReadValue<Vector2>().x == 0 && playerDirection == Direction.right){
+                //isFacingRight = true;
+                playerDirection = Direction.right;
+            }
+            else if(context.ReadValue<Vector2>().x == 0 && playerDirection == Direction.left){
+                //isFacingRight = false;
+                playerDirection = Direction.left;
+            }
         }
     }
 
@@ -115,7 +145,18 @@ public class PlayerController : MonoBehaviour
             }
 
             if(isReloaded){
-                GameObject bulletInstance = Instantiate(bullet, fireTrans.position, fireTrans.rotation);
+
+                if(playerDirection == Direction.right){
+                    GameObject bulletInstance = Instantiate(bullet_r, fireTransR.position, fireTransR.rotation);
+                }
+                else if(playerDirection == Direction.left){
+                    GameObject bulletInstance = Instantiate(bullet_l, fireTransL.position, fireTransL.rotation);
+                }
+                else{
+                    return;
+                }
+
+                //GameObject bulletInstance = Instantiate(bullet_r, fireTransR.position, fireTransR.rotation);
             }
             else
                 return;

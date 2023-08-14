@@ -162,6 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 7595093215314477217}
+  bulletTrajectory: {x: 15, y: 0}
 --- !u!1 &7595093215314477217
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,7 +173,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4265859047257920364}
   m_Layer: 0
-  m_Name: BulletPrefab
+  m_Name: RightBulletPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

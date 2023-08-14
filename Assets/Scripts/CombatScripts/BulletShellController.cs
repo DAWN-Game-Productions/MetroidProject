@@ -9,7 +9,8 @@ public class BulletShellController : MonoBehaviour
     private LayerMask EnemyLMask = 7;
     [SerializeField] private GameObject bulletPrefab;
     private Vector2 firePos;
-    
+
+    [SerializeField] private Vector2 bulletTrajectory;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +28,7 @@ public class BulletShellController : MonoBehaviour
         firePos = gameObject.transform.position;
         
         Rigidbody2D bulletRB = gameObject.GetComponent<Rigidbody2D>();
-        bulletRB.velocity = new Vector2(15f, 0);
+        bulletRB.velocity = bulletTrajectory;
     }
 
     private void OnTriggerEnter2D (Collider2D other){
@@ -35,6 +36,10 @@ public class BulletShellController : MonoBehaviour
         //      for said interface(Down the line, not needed right now)
         if(other.gameObject.layer == 6){
             Destroy(bulletPrefab);
+            return;
+        }
+        else if(other.gameObject.layer == 0){
+            Debug.Log("We hit the player's collider");
             return;
         }
         
