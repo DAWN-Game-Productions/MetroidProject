@@ -35,15 +35,14 @@ public class PlayerController : MonoBehaviour
 
     
     // will use later to flip player sprite depending on direction
-    enum Direction { right, left};
-    Direction playerDirection = Direction.right;
+    public enum Direction { right, left};
+    public Direction playerDirection = Direction.right;
 
     //For jumping
     [SerializeField] private LayerMask platformLayerMask;
     [SerializeField] private Camera mainCam;
     [SerializeField] private GameObject player;
-    [SerializeField] private GameObject bullet_r;
-    [SerializeField] private GameObject bullet_l;
+    [SerializeField] private GameObject bullet;
     [SerializeField] private Transform fireTransR;
     [SerializeField] private Transform fireTransL;
 
@@ -139,10 +138,10 @@ public class PlayerController : MonoBehaviour
             if(isReloaded){
 
                 if(playerDirection == Direction.right){
-                    GameObject bulletInstance = Instantiate(bullet_r, fireTransR.position, fireTransR.rotation);
+                    GameObject bulletInstance = Instantiate(bullet, fireTransR.position, Quaternion.Euler(0, 0, 90));
                 }
                 else if(playerDirection == Direction.left){
-                    GameObject bulletInstance = Instantiate(bullet_l, fireTransL.position, fireTransL.rotation);
+                    GameObject bulletInstance = Instantiate(bullet, fireTransL.position, Quaternion.Euler(0, 0, 90));
                 }
                 else{
                     return;

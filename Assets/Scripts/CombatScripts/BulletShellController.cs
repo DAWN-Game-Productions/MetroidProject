@@ -7,7 +7,6 @@ public class BulletShellController : MonoBehaviour
     private float MaxLifeTime = 2f;
     private int Damage = 50;
     private LayerMask EnemyLMask = 7;
-    [SerializeField] private GameObject bulletPrefab;
     private Vector2 firePos;
 
     [SerializeField] private Vector2 bulletTrajectory;
@@ -21,21 +20,30 @@ public class BulletShellController : MonoBehaviour
     private void Update(){
 
         if(firePos != null && (Vector3.Distance(gameObject.transform.position, firePos) > 17f))
-            Destroy(bulletPrefab);
+            Destroy(gameObject);
     }
 
     private void Awake(){
         firePos = gameObject.transform.position;
         
         Rigidbody2D bulletRB = gameObject.GetComponent<Rigidbody2D>();
-        bulletRB.velocity = bulletTrajectory;
+        GameObject player = GameObject.Find("Player");
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        if (playerController.playerDirection == PlayerController.Direction.right)
+        {
+			bulletRB.velocity = bulletTrajectory;
+		}
+        else
+        {
+            bulletRB.velocity = -bulletTrajectory;
+        }
     }
 
     private void OnTriggerEnter2D (Collider2D other){
         // Create Interface for the enemies that each different kind of enemy will implement. Change BasicAIScript to search
         //      for said interface(Down the line, not needed right now)
         if(other.gameObject.layer == 6){
-            Destroy(bulletPrefab);
+            Destroy(gameObject);
             return;
         }
         else if(other.gameObject.layer == 0){
@@ -53,6 +61,6 @@ public class BulletShellController : MonoBehaviour
             ai.currentHealth -= Damage;
         }
 
-        Destroy(bulletPrefab);
+        Destroy(gameObject);
     }
 }

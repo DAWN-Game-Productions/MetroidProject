@@ -699,7 +699,7 @@ Transform:
   m_GameObject: {fileID: 432508395}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.24, y: -0.46, z: 0}
+  m_LocalPosition: {x: -1.24, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1948,13 +1948,13 @@ MonoBehaviour:
   currentHealth: 0
   bulletsRemaining: 0
   magSize: 9
+  playerDirection: 0
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 64
   mainCam: {fileID: 1150884952}
   player: {fileID: 1566183733}
-  bullet_r: {fileID: 7595093215314477217, guid: c0543b72fc9daa64b921153cfd67e2e7, type: 3}
-  bullet_l: {fileID: 4132278717668978933, guid: 0e6caa493dddfe44eac835d131ebb60f, type: 3}
+  bullet: {fileID: 7861046538210478462, guid: 281a5e0f1dd6cd645b5465ce3f623b48, type: 3}
   fireTransR: {fileID: 1994974345}
   fireTransL: {fileID: 432508396}
 --- !u!61 &1566183737
@@ -2352,7 +2352,7 @@ Transform:
   m_GameObject: {fileID: 1994974344}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.52, y: -0.46, z: 0}
+  m_LocalPosition: {x: 1.24, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
