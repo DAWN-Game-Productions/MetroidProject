@@ -35,10 +35,8 @@ public class PlayerController : MonoBehaviour
 
     
     // will use later to flip player sprite depending on direction
-    enum Direction { right, left, up};
+    enum Direction { right, left};
     Direction playerDirection = Direction.right;
-    //bool isFacingRight = true;
-
 
     //For jumping
     [SerializeField] private LayerMask platformLayerMask;
@@ -59,7 +57,6 @@ public class PlayerController : MonoBehaviour
 
         currentHealth = maxHealth;
         healthBar.setMaxHealth(maxHealth);
-
     }
 
     // Update is called once per frame
@@ -76,7 +73,6 @@ public class PlayerController : MonoBehaviour
         // Smooth look up and down camera movements
         isMoving = rb2D.velocity != Vector2.zero;
 
-        //Debug.Log(isFacingRight);
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
@@ -101,19 +97,15 @@ public class PlayerController : MonoBehaviour
         {
             horizontal = context.ReadValue<Vector2>().x;
             if(context.ReadValue<Vector2>().x > 0){
-                //isFacingRight = true;
                 playerDirection = Direction.right;
             }
             else if(context.ReadValue<Vector2>().x < 0){
-                //isFacingRight = false;
                 playerDirection = Direction.left;
             }
             else if(context.ReadValue<Vector2>().x == 0 && playerDirection == Direction.right){
-                //isFacingRight = true;
                 playerDirection = Direction.right;
             }
             else if(context.ReadValue<Vector2>().x == 0 && playerDirection == Direction.left){
-                //isFacingRight = false;
                 playerDirection = Direction.left;
             }
         }
@@ -155,8 +147,6 @@ public class PlayerController : MonoBehaviour
                 else{
                     return;
                 }
-
-                //GameObject bulletInstance = Instantiate(bullet_r, fireTransR.position, fireTransR.rotation);
             }
             else
                 return;
