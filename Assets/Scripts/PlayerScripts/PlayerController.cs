@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
 
     //private float distance = 10;
 
+    private SpriteRenderer playerSprite;
+
     //COMPONENT GRAB
     private Rigidbody2D rb2D;
     private BoxCollider2D bc2D;
@@ -50,6 +52,8 @@ public class PlayerController : MonoBehaviour
 
     private void Awake(){
 
+        playerSprite = this.GetComponent<SpriteRenderer>();
+
         rb2D = transform.GetComponent<Rigidbody2D>();
         bc2D = transform.GetComponent<BoxCollider2D>();
         
@@ -62,6 +66,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+
+        playerSprite.flipX = playerDirection == Direction.right ? true : false;
+
         if((Time.time - FireTime) > 1f && isReloaded == false){
             isReloaded = true;
             bulletsRemaining = 9;
@@ -130,13 +137,15 @@ public class PlayerController : MonoBehaviour
     {
         if(context.performed)
         {
-            bulletsRemaining--;
-            if(bulletsRemaining <= 1){
+            
+            if(bulletsRemaining == 0){
                 FireTime = Time.time;
                 isReloaded = false;
             }
 
-            if(isReloaded){
+            bulletsRemaining--;
+
+            if (isReloaded){
                 if(playerDirection == Direction.right){
                     instantiateBullet(bullet, fireTransR.position, bulletVelocity);
                 }
