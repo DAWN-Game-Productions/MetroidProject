@@ -18,7 +18,7 @@ public class BulletShellController : MonoBehaviour
     private void OnTriggerEnter2D (Collider2D other){
         // Create Interface for the enemies that each different kind of enemy will implement. Change BasicAIScript to search
         // for said interface(Down the line, not needed right now)
-        if(other.gameObject.layer == 6){
+        if(other.gameObject.layer == 6 || other.gameObject.layer == 8){
             Destroy(gameObject);
             return;
         }
