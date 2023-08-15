@@ -1946,6 +1946,7 @@ MonoBehaviour:
   healthBar: {fileID: 881611001}
   maxHealth: 100
   currentHealth: 0
+  bulletVelocity: {x: 15, y: 0}
   bulletsRemaining: 0
   magSize: 9
   playerDirection: 0

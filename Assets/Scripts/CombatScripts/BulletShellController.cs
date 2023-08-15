@@ -4,44 +4,20 @@ using UnityEngine;
 
 public class BulletShellController : MonoBehaviour
 {
-    private float MaxLifeTime = 2f;
+    private float MaxLifeTime = 1.5f;
     private int Damage = 50;
     private LayerMask EnemyLMask = 7;
-    private Vector2 firePos;
-
-    [SerializeField] private Vector2 bulletTrajectory;
 
     // Start is called before the first frame update
-    void Start()
+    IEnumerator Start()
     {
-        Destroy(gameObject, MaxLifeTime);  
-    }
-
-    private void Update(){
-
-        if(firePos != null && (Vector3.Distance(gameObject.transform.position, firePos) > 17f))
-            Destroy(gameObject);
-    }
-
-    private void Awake(){
-        firePos = gameObject.transform.position;
-        
-        Rigidbody2D bulletRB = gameObject.GetComponent<Rigidbody2D>();
-        GameObject player = GameObject.Find("Player");
-        PlayerController playerController = player.GetComponent<PlayerController>();
-        if (playerController.playerDirection == PlayerController.Direction.right)
-        {
-			bulletRB.velocity = bulletTrajectory;
-		}
-        else
-        {
-            bulletRB.velocity = -bulletTrajectory;
-        }
+        yield return new WaitForSeconds(MaxLifeTime);
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D (Collider2D other){
         // Create Interface for the enemies that each different kind of enemy will implement. Change BasicAIScript to search
-        //      for said interface(Down the line, not needed right now)
+        // for said interface(Down the line, not needed right now)
         if(other.gameObject.layer == 6){
             Destroy(gameObject);
             return;
@@ -50,7 +26,6 @@ public class BulletShellController : MonoBehaviour
             Debug.Log("We hit the player's collider");
             return;
         }
-        
 
         BasicAIController ai = other.GetComponent<BasicAIController>();
 

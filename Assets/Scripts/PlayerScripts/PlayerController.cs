@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     public int currentHealth;
 
     //COMBAT VARIABLES
+    public Vector2 bulletVelocity = new Vector2(15f, 0f);
     public int bulletsRemaining;
     public int magSize = 9;
     private float FireTime;
@@ -136,20 +137,20 @@ public class PlayerController : MonoBehaviour
             }
 
             if(isReloaded){
-
                 if(playerDirection == Direction.right){
-                    GameObject bulletInstance = Instantiate(bullet, fireTransR.position, Quaternion.Euler(0, 0, 90));
+                    instantiateBullet(bullet, fireTransR.position, bulletVelocity);
                 }
                 else if(playerDirection == Direction.left){
-                    GameObject bulletInstance = Instantiate(bullet, fireTransL.position, Quaternion.Euler(0, 0, 90));
-                }
-                else{
-                    return;
-                }
+					instantiateBullet(bullet, fireTransL.position, -bulletVelocity);
+				}
             }
-            else
-                return;
         }
     }
 
+    private void instantiateBullet(GameObject bullet, Vector3 position, Vector2 velocity)
+    {
+        GameObject bulletInstance = Instantiate(bullet, position, Quaternion.Euler(0, 0, 90));
+		Rigidbody2D rbBulletInstance = bulletInstance.GetComponent<Rigidbody2D>();
+        rbBulletInstance.velocity = velocity;
+    }
 }
