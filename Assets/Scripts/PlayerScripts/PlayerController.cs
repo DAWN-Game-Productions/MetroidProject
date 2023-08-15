@@ -137,13 +137,15 @@ public class PlayerController : MonoBehaviour
     {
         if(context.performed)
         {
-            bulletsRemaining--;
-            if(bulletsRemaining <= 1){
+            
+            if(bulletsRemaining == 0){
                 FireTime = Time.time;
                 isReloaded = false;
             }
 
-            if(isReloaded){
+            bulletsRemaining--;
+
+            if (isReloaded){
                 if(playerDirection == Direction.right){
                     instantiateBullet(bullet, fireTransR.position, bulletVelocity);
                 }
