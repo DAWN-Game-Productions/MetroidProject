@@ -8,51 +8,67 @@ public class PlayerController : MonoBehaviour
 
     //private float distance = 10;
 
+    private SpriteRenderer playerSprite;
+
+    //COMPONENT GRAB
     private Rigidbody2D rb2D;
     private BoxCollider2D bc2D;
+
+    //MOVEMENT BOOLEANS
     public bool grounded;
+    public bool isMoving;
+
+    //MOVEMENT VARIABLES
     private float horizontal;
     private float moveSpeed = 10f;
     private float jumpVelocity = 10f;
-    public bool isMoving;
     private float verticalDeadzone = 0.6f;
+    
+    //HEALTH BAR
+    public HealthBar healthBar;
     public int maxHealth = 100;
     public int currentHealth;
+
+    //COMBAT VARIABLES
+    public Vector2 bulletVelocity = new Vector2(15f, 0f);
     public int bulletsRemaining;
     public int magSize = 9;
     private float FireTime;
     private bool isReloaded = true;
 
-    public HealthBar healthBar;
+    
     // will use later to flip player sprite depending on direction
-    //bool isFacingRight = true;
-
+    public enum Direction { right, left};
+    public Direction playerDirection = Direction.right;
 
     //For jumping
     [SerializeField] private LayerMask platformLayerMask;
     [SerializeField] private Camera mainCam;
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject bullet;
-    [SerializeField] private Transform fireTrans;
+    [SerializeField] private Transform fireTransR;
+    [SerializeField] private Transform fireTransL;
 
 
     private void Awake(){
 
+        playerSprite = this.GetComponent<SpriteRenderer>();
+
         rb2D = transform.GetComponent<Rigidbody2D>();
         bc2D = transform.GetComponent<BoxCollider2D>();
         
-        //mainCam.orthographicSize = 20f;
-
         bulletsRemaining = magSize;
 
         currentHealth = maxHealth;
         healthBar.setMaxHealth(maxHealth);
-
     }
 
     // Update is called once per frame
     private void Update()
     {
+
+        playerSprite.flipX = playerDirection == Direction.right ? true : false;
+
         if((Time.time - FireTime) > 1f && isReloaded == false){
             isReloaded = true;
             bulletsRemaining = 9;
@@ -63,6 +79,7 @@ public class PlayerController : MonoBehaviour
         rb2D.velocity = new Vector2(horizontal * moveSpeed, rb2D.velocity.y);
         // Smooth look up and down camera movements
         isMoving = rb2D.velocity != Vector2.zero;
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
@@ -86,6 +103,18 @@ public class PlayerController : MonoBehaviour
         else
         {
             horizontal = context.ReadValue<Vector2>().x;
+            if(context.ReadValue<Vector2>().x > 0){
+                playerDirection = Direction.right;
+            }
+            else if(context.ReadValue<Vector2>().x < 0){
+                playerDirection = Direction.left;
+            }
+            else if(context.ReadValue<Vector2>().x == 0 && playerDirection == Direction.right){
+                playerDirection = Direction.right;
+            }
+            else if(context.ReadValue<Vector2>().x == 0 && playerDirection == Direction.left){
+                playerDirection = Direction.left;
+            }
         }
     }
 
@@ -115,11 +144,20 @@ public class PlayerController : MonoBehaviour
             }
 
             if(isReloaded){
-                GameObject bulletInstance = Instantiate(bullet, fireTrans.position, fireTrans.rotation);
+                if(playerDirection == Direction.right){
+                    instantiateBullet(bullet, fireTransR.position, bulletVelocity);
+                }
+                else if(playerDirection == Direction.left){
+					instantiateBullet(bullet, fireTransL.position, -bulletVelocity);
+				}
             }
-            else
-                return;
         }
     }
 
+    private void instantiateBullet(GameObject bullet, Vector3 position, Vector2 velocity)
+    {
+        GameObject bulletInstance = Instantiate(bullet, position, Quaternion.Euler(0, 0, 90));
+		Rigidbody2D rbBulletInstance = bulletInstance.GetComponent<Rigidbody2D>();
+        rbBulletInstance.velocity = velocity;
+    }
 }
