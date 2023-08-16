@@ -73,6 +73,14 @@ public class PlayerController : MonoBehaviour
         // Smooth look up and down camera movements
         isMoving = rb2D.velocity != Vector2.zero;
 
+        if(checkDeath())
+            Destroy(gameObject);
+    }
+
+    private bool checkDeath(){
+        if(currentHealth <= 0)
+            return true;
+        return false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
@@ -150,6 +158,7 @@ public class PlayerController : MonoBehaviour
     private void instantiateBullet(GameObject bullet, Vector3 position, Vector2 velocity)
     {
         GameObject bulletInstance = Instantiate(bullet, position, Quaternion.Euler(0, 0, 90));
+        bulletInstance.GetComponent<BulletShellController>().setOrigin(1);
 		Rigidbody2D rbBulletInstance = bulletInstance.GetComponent<Rigidbody2D>();
         rbBulletInstance.velocity = velocity;
     }
