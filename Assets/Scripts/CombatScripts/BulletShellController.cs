@@ -15,24 +15,28 @@ public class BulletShellController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter2D (Collider2D other){
+    private void OnTriggerEnter2D(Collider2D other)
+    {
         // Create Interface for the enemies that each different kind of enemy will implement. Change BasicAIScript to search
         // for said interface(Down the line, not needed right now)
-        if(other.gameObject.layer == 6 || other.gameObject.layer == 8){
+        if (other.gameObject.layer == 6 || other.gameObject.layer == 8)
+        {
             Destroy(gameObject);
             return;
         }
-        else if(other.gameObject.layer == 0){
+        else if (other.gameObject.layer == 0)
+        {
             Debug.Log("We hit the player's collider");
             return;
         }
 
         BasicAIController ai = other.GetComponent<BasicAIController>();
 
-        if(!ai)
+        if (!ai)
             Debug.Log("object not found");
-        
-        if(ai.gameObject.layer == EnemyLMask){
+
+        if (ai.gameObject.layer == EnemyLMask)
+        {
             ai.currentHealth -= Damage;
         }
 
