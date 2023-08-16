@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     private float moveSpeed = 10f;
     private float jumpVelocity = 10f;
     private float verticalDeadzone = 0.6f;
-    
+
     //HEALTH BAR
     public HealthBar healthBar;
     public int maxHealth = 100;
@@ -36,9 +36,9 @@ public class PlayerController : MonoBehaviour
     private float FireTime;
     private bool isReloaded = true;
 
-    
+
     // will use later to flip player sprite depending on direction
-    public enum Direction { right, left};
+    public enum Direction { right, left };
     public Direction playerDirection = Direction.right;
 
     //For jumping
@@ -50,13 +50,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform fireTransL;
 
 
-    private void Awake(){
+    private void Awake()
+    {
 
         playerSprite = this.GetComponent<SpriteRenderer>();
 
         rb2D = transform.GetComponent<Rigidbody2D>();
         bc2D = transform.GetComponent<BoxCollider2D>();
-        
+
         bulletsRemaining = magSize;
 
         currentHealth = maxHealth;
@@ -69,7 +70,8 @@ public class PlayerController : MonoBehaviour
 
         playerSprite.flipX = playerDirection == Direction.right ? true : false;
 
-        if((Time.time - FireTime) > 1f && isReloaded == false){
+        if ((Time.time - FireTime) > 1f && isReloaded == false)
+        {
             isReloaded = true;
             bulletsRemaining = 9;
         }
@@ -82,14 +84,18 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter2D(Collision2D collision){
-        if(collision.gameObject.layer == 6 && !grounded){
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 6 && !grounded)
+        {
             grounded = true;
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision){
-        if(collision.gameObject.layer == 6 && grounded){
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 6 && grounded)
+        {
             grounded = false;
         }
     }
@@ -103,16 +109,20 @@ public class PlayerController : MonoBehaviour
         else
         {
             horizontal = context.ReadValue<Vector2>().x;
-            if(context.ReadValue<Vector2>().x > 0){
+            if (context.ReadValue<Vector2>().x > 0)
+            {
                 playerDirection = Direction.right;
             }
-            else if(context.ReadValue<Vector2>().x < 0){
+            else if (context.ReadValue<Vector2>().x < 0)
+            {
                 playerDirection = Direction.left;
             }
-            else if(context.ReadValue<Vector2>().x == 0 && playerDirection == Direction.right){
+            else if (context.ReadValue<Vector2>().x == 0 && playerDirection == Direction.right)
+            {
                 playerDirection = Direction.right;
             }
-            else if(context.ReadValue<Vector2>().x == 0 && playerDirection == Direction.left){
+            else if (context.ReadValue<Vector2>().x == 0 && playerDirection == Direction.left)
+            {
                 playerDirection = Direction.left;
             }
         }
@@ -135,23 +145,27 @@ public class PlayerController : MonoBehaviour
 
     public void SecondaryFire(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if (context.performed)
         {
-            
-            if(bulletsRemaining == 0){
+
+            if (bulletsRemaining == 0)
+            {
                 FireTime = Time.time;
                 isReloaded = false;
             }
 
             bulletsRemaining--;
 
-            if (isReloaded){
-                if(playerDirection == Direction.right){
+            if (isReloaded)
+            {
+                if (playerDirection == Direction.right)
+                {
                     instantiateBullet(bullet, fireTransR.position, bulletVelocity);
                 }
-                else if(playerDirection == Direction.left){
-					instantiateBullet(bullet, fireTransL.position, -bulletVelocity);
-				}
+                else if (playerDirection == Direction.left)
+                {
+                    instantiateBullet(bullet, fireTransL.position, -bulletVelocity);
+                }
             }
         }
     }
@@ -159,7 +173,7 @@ public class PlayerController : MonoBehaviour
     private void instantiateBullet(GameObject bullet, Vector3 position, Vector2 velocity)
     {
         GameObject bulletInstance = Instantiate(bullet, position, Quaternion.Euler(0, 0, 90));
-		Rigidbody2D rbBulletInstance = bulletInstance.GetComponent<Rigidbody2D>();
+        Rigidbody2D rbBulletInstance = bulletInstance.GetComponent<Rigidbody2D>();
         rbBulletInstance.velocity = velocity;
     }
 }
