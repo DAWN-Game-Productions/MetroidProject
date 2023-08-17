@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
         isMoving = rb2D.velocity != Vector2.zero;
 
             if(checkDeath()){
-                Destroy(gameObject);
+            gameObject.SetActive(false);
             }
     }
 
