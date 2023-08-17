@@ -20,35 +20,42 @@ public class BulletShellController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter2D (Collider2D other){
+    private void OnTriggerEnter2D(Collider2D other)
+    {
         // Create Interface for the enemies that each different kind of enemy will implement. Change BasicAIScript to search
         // for said interface(Down the line, not needed right now)
-        if(other.gameObject.layer == 6 || other.gameObject.layer == 8){
+        if (other.gameObject.layer == 6 || other.gameObject.layer == 8)
+        {
             Destroy(gameObject);
             return;
         }
-        else if(other.gameObject.layer == 0){
+        else if (other.gameObject.layer == 0)
+        {
             Debug.Log("We hit the player's collider");
             return;
         }
 
-        if(origin == OriginObject.player){
+        if (origin == OriginObject.player)
+        {
             BasicAIController ai = other.GetComponent<BasicAIController>();
 
-            if(!ai)
+            if (!ai)
                 Debug.Log("object not found");
-        
-            if(ai.gameObject.layer == EnemyLMask){
+
+            if (ai.gameObject.layer == EnemyLMask)
+            {
                 ai.currentHealth -= Damage;
             }
         }
-        else if(origin == OriginObject.enemy){
+        else if (origin == OriginObject.enemy)
+        {
             PlayerController pc = other.GetComponent<PlayerController>();
 
-            if(!pc)
+            if (!pc)
                 Debug.Log("object not found(player controller)");
-            
-            if(pc.gameObject.layer == PlayerLMask){
+
+            if (pc.gameObject.layer == PlayerLMask)
+            {
                 pc.currentHealth -= Damage;
             }
         }
@@ -56,10 +63,11 @@ public class BulletShellController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void setOrigin(int other){
-        if(other == 0)
+    public void setOrigin(int other)
+    {
+        if (other == 0)
             origin = OriginObject.enemy;
-        else if(other == 1)
+        else if (other == 1)
             origin = OriginObject.player;
 
         Debug.Log(origin);

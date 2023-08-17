@@ -82,13 +82,15 @@ public class PlayerController : MonoBehaviour
         // Smooth look up and down camera movements
         isMoving = rb2D.velocity != Vector2.zero;
 
-            if(checkDeath()){
+        if (checkDeath())
+        {
             gameObject.SetActive(false);
-            }
+        }
     }
 
-    private bool checkDeath(){
-        if(currentHealth <= 0)
+    private bool checkDeath()
+    {
+        if (currentHealth <= 0)
             return true;
         return false;
     }

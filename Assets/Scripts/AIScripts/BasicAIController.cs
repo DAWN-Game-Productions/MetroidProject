@@ -15,7 +15,7 @@ public class BasicAIController : MonoBehaviour
     private float lastTimeFired;
 
     private Vector2 bulletVelocity = new Vector2(15f, 0);
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,14 +26,16 @@ public class BasicAIController : MonoBehaviour
     void Update()
     {
         //Get the health bar of the enemy. if the healthbar is 0 destroy the enemy
-        if(checkDeath()){
+        if (checkDeath())
+        {
             //Debug.Log("Enemy Killed Baby");
             Destroy(gameObject);
         }
     }
 
-    public bool checkDeath(){
-        if(currentHealth <= 0)
+    public bool checkDeath()
+    {
+        if (currentHealth <= 0)
             return true;
         return false;
     }
@@ -45,9 +47,12 @@ public class BasicAIController : MonoBehaviour
     //     }
     // }
 
-    private void OnTriggerStay2D(Collider2D other){
-        if(other.gameObject.layer == 3){
-            if(Time.time - lastTimeFired >= shotCooldown){
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.layer == 3)
+        {
+            if (Time.time - lastTimeFired >= shotCooldown)
+            {
                 instantiateBullet(bullet, fireTransform.position, -bulletVelocity);
                 lastTimeFired = Time.time;
             }
@@ -60,7 +65,7 @@ public class BasicAIController : MonoBehaviour
     {
         GameObject bulletInstance = Instantiate(bullet, position, Quaternion.Euler(0, 0, 90));
         bulletInstance.GetComponent<BulletShellController>().setOrigin(0);
-		Rigidbody2D rbBulletInstance = bulletInstance.GetComponent<Rigidbody2D>();
+        Rigidbody2D rbBulletInstance = bulletInstance.GetComponent<Rigidbody2D>();
         rbBulletInstance.velocity = velocity;
     }
 }
