@@ -11,7 +11,8 @@ public class CameraController : MonoBehaviour
     private float vertical; // for camera
 
 
-    private void Awake(){
+    private void Awake()
+    {
         playerCon = player.GetComponent<PlayerController>();
         mainCam.orthographicSize = 20f;
     }
@@ -19,7 +20,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(playerCon.isMoving)
+        if (playerCon.isMoving)
             vertical = player.transform.position.y;
 
         mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, new Vector3(player.transform.position.x, vertical, mainCam.transform.position.z), 0.02f);

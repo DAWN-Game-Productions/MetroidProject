@@ -27,14 +27,14 @@ public class HUDController : MonoBehaviour
 
     private void updateAmmoHUD()
     {
-        if (player.GetComponent<PlayerController>().bulletsRemaining - 1 < 0)
+        if (player.GetComponent<PlayerController>().bulletsRemaining < 0)
         {
             remaining.GetComponent<TextMeshProUGUI>().text = "0";
         }
         else
         {
-            remaining.GetComponent<TextMeshProUGUI>().text = (player.GetComponent<PlayerController>().bulletsRemaining - 1).ToString();
+            remaining.GetComponent<TextMeshProUGUI>().text = (player.GetComponent<PlayerController>().bulletsRemaining).ToString();
         }
-        total.GetComponent<TextMeshProUGUI>().text = (player.GetComponent<PlayerController>().magSize - 1).ToString();
+        total.GetComponent<TextMeshProUGUI>().text = (player.GetComponent<PlayerController>().magSize).ToString();
     }
 }
