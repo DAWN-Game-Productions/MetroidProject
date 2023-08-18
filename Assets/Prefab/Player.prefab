@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2508834299743999303}
   - component: {fileID: 1084021285637929069}
   - component: {fileID: 22390092413469256}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -358,7 +358,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4551436516798418683}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FireTransformLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -389,7 +389,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7497465471762812692}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FireTransformRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

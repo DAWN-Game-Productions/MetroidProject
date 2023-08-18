@@ -40,16 +40,18 @@ public class BasicAIController : MonoBehaviour
         return false;
     }
 
-    // IEnumerator OnTriggerStay2D(Collider2D other){
-    //     yield return new WaitForSeconds(shotCooldown);
-    //     if(other.gameObject.layer == 3){
-    //         instantiateBullet(bullet, fireTransform.position, -bulletVelocity);
-    //     }
-    // }
+    //IEnumerator OnTriggerStay2D(Collider2D other)
+    //{
+    //    yield return new WaitForSeconds(shotCooldown);
+    //    if (other.gameObject.layer == 3)
+    //    {
+    //        instantiateBullet(bullet, fireTransform.position, -bulletVelocity);
+    //    }
+    //}
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.layer == 3)
+        if (other.gameObject.layer == 3) // if player detected 
         {
             if (Time.time - lastTimeFired >= shotCooldown)
             {
