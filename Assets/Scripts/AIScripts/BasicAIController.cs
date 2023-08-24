@@ -19,7 +19,7 @@ public class BasicAIController : MonoBehaviour
     private float shotCooldown = 1.8f;
     private float lastTimeFired;
 
-    private float directionChangeCooldown = 3f;
+    private float directionChangeCooldown = 6f;
 
     private Vector2 bulletVelocity = new Vector2(15f, 0);
 
@@ -63,13 +63,11 @@ public class BasicAIController : MonoBehaviour
             if(enemyDirection == Direction.left){
                 fireTransform.localPosition = new Vector3(-fireTransform.localPosition.x, fireTransform.localPosition.y, fireTransform.localPosition.z);
                 VisionCone.transform.localPosition = new Vector3(-VisionCone.transform.localPosition.x, VisionCone.transform.localPosition.y, VisionCone.transform.localPosition.z);
-                //Debug.Log("Switched");
                 enemyDirection = Direction.right;
             }
             else{
                 fireTransform.localPosition = new Vector3(-fireTransform.localPosition.x, fireTransform.localPosition.y, fireTransform.localPosition.z);
                 VisionCone.transform.localPosition = new Vector3(-VisionCone.transform.localPosition.x, VisionCone.transform.localPosition.y, VisionCone.transform.localPosition.z);
-                //Debug.Log("Switched Back");
                 enemyDirection = Direction.left;
             }
         }
@@ -81,7 +79,10 @@ public class BasicAIController : MonoBehaviour
         {
             if (Time.time - lastTimeFired >= shotCooldown)
             {
-                instantiateBullet(bullet, fireTransform.position, -bulletVelocity);
+                if(enemyDirection == Direction.left)
+                    instantiateBullet(bullet, fireTransform.position, -bulletVelocity);
+                else if(enemyDirection == Direction.right)
+                    instantiateBullet(bullet, fireTransform.position, bulletVelocity);
                 lastTimeFired = Time.time;
             }
             else
