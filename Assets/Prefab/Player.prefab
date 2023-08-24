@@ -36,7 +36,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7497465471762812692}
-  - {fileID: 4551436516798418683}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8256534318881337031
@@ -178,8 +177,6 @@ MonoBehaviour:
   grounded: 0
   isMoving: 0
   healthBar: {fileID: 0}
-  maxHealth: 100
-  currentHealth: 0
   bulletVelocity: {x: 15, y: 0}
   bulletsRemaining: 0
   magSize: 9
@@ -190,8 +187,7 @@ MonoBehaviour:
   mainCam: {fileID: 0}
   player: {fileID: 2186670731567127390}
   bullet: {fileID: 7595093215314477217, guid: 281a5e0f1dd6cd645b5465ce3f623b48, type: 3}
-  fireTransR: {fileID: 7497465471762812692}
-  fireTransL: {fileID: 4551436516798418683}
+  fireTransform: {fileID: 0}
 --- !u!114 &1084021285637929069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,37 +345,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!1 &3842381802373615719
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4551436516798418683}
-  m_Layer: 3
-  m_Name: FireTransformLeft
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4551436516798418683
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3842381802373615719}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.297, y: 0.479, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1901775282005257355}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8514756665908828907
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,7 +355,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7497465471762812692}
   m_Layer: 3
-  m_Name: FireTransformRight
+  m_Name: FireTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -44,8 +44,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private Camera mainCam;
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject bullet;
-    [SerializeField] private Transform fireTransR;
-    [SerializeField] private Transform fireTransL;
+    [SerializeField] private Transform fireTransform;
+    //[SerializeField] private Transform fireTransL;
 
 
     private void Awake()
@@ -105,12 +105,14 @@ public class PlayerController : MonoBehaviour, IDamageable
         else
         {
             horizontal = context.ReadValue<Vector2>().x;
-            if (context.ReadValue<Vector2>().x > 0)
+            if (context.ReadValue<Vector2>().x > 0 && playerDirection != Direction.right)
             {
+                setFireTransform();
                 playerDirection = Direction.right;
             }
-            else if (context.ReadValue<Vector2>().x < 0)
+            else if (context.ReadValue<Vector2>().x < 0 && playerDirection != Direction.left)
             {
+                setFireTransform();
                 playerDirection = Direction.left;
             }
             else if (context.ReadValue<Vector2>().x == 0 && playerDirection == Direction.right)
@@ -122,6 +124,10 @@ public class PlayerController : MonoBehaviour, IDamageable
                 playerDirection = Direction.left;
             }
         }
+    }
+
+    public void setFireTransform(){
+        fireTransform.localPosition = new Vector3(-fireTransform.localPosition.x, fireTransform.localPosition.y, fireTransform.localPosition.z);
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -156,11 +162,11 @@ public class PlayerController : MonoBehaviour, IDamageable
             {
                 if (playerDirection == Direction.right)
                 {
-                    instantiateBullet(bullet, fireTransR.position, bulletVelocity);
+                    instantiateBullet(bullet, fireTransform.position, bulletVelocity);
                 }
                 else if (playerDirection == Direction.left)
                 {
-                    instantiateBullet(bullet, fireTransL.position, -bulletVelocity);
+                    instantiateBullet(bullet, fireTransform.position, -bulletVelocity);
                 }
             }
         }
