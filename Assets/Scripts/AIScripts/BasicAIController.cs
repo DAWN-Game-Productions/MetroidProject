@@ -5,6 +5,11 @@ using UnityEngine;
 public class BasicAIController : MonoBehaviour
 {
 
+    public enum Direction { right, left };
+    public Direction enemyDirection = Direction.left;
+
+    private SpriteRenderer enemySprite;
+
     public int maxHealth = 100; // can probably get this number from somewhere else down the line
     public int currentHealth;
     [SerializeField] private GameObject VisionCone;
@@ -14,17 +19,29 @@ public class BasicAIController : MonoBehaviour
     private float shotCooldown = 1.8f;
     private float lastTimeFired;
 
+    private float directionChangeCooldown = 3f;
+
     private Vector2 bulletVelocity = new Vector2(15f, 0);
 
+    private IEnumerator directionCoroutine;
+    //private int direction = 0;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        directionCoroutine = SwitchFacingDirection();
+        StartCoroutine(directionCoroutine);
         currentHealth = maxHealth;
+
+        enemySprite = this.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        enemySprite.flipX = enemyDirection == Direction.left ? true : false;
+
         //Get the health bar of the enemy. if the healthbar is 0 destroy the enemy
         if (checkDeath())
         {
@@ -40,14 +57,23 @@ public class BasicAIController : MonoBehaviour
         return false;
     }
 
-    //IEnumerator OnTriggerStay2D(Collider2D other)
-    //{
-    //    yield return new WaitForSeconds(shotCooldown);
-    //    if (other.gameObject.layer == 3)
-    //    {
-    //        instantiateBullet(bullet, fireTransform.position, -bulletVelocity);
-    //    }
-    //}
+    private IEnumerator SwitchFacingDirection(){
+        while(true){
+            yield return new WaitForSeconds(directionChangeCooldown);
+            if(enemyDirection == Direction.left){
+                fireTransform.localPosition = new Vector3(-fireTransform.localPosition.x, fireTransform.localPosition.y, fireTransform.localPosition.z);
+                VisionCone.transform.localPosition = new Vector3(-VisionCone.transform.localPosition.x, VisionCone.transform.localPosition.y, VisionCone.transform.localPosition.z);
+                //Debug.Log("Switched");
+                enemyDirection = Direction.right;
+            }
+            else{
+                fireTransform.localPosition = new Vector3(-fireTransform.localPosition.x, fireTransform.localPosition.y, fireTransform.localPosition.z);
+                VisionCone.transform.localPosition = new Vector3(-VisionCone.transform.localPosition.x, VisionCone.transform.localPosition.y, VisionCone.transform.localPosition.z);
+                //Debug.Log("Switched Back");
+                enemyDirection = Direction.left;
+            }
+        }
+    }
 
     private void OnTriggerStay2D(Collider2D other)
     {
@@ -70,4 +96,11 @@ public class BasicAIController : MonoBehaviour
         Rigidbody2D rbBulletInstance = bulletInstance.GetComponent<Rigidbody2D>();
         rbBulletInstance.velocity = velocity;
     }
+
+
+
+
+
+
+
 }
