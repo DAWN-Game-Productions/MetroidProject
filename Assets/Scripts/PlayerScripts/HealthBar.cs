@@ -8,40 +8,30 @@ public class HealthBar : MonoBehaviour
 
     public Slider slider;
 
-    public void setHealth(int health)
+    public void updateHealth(float health)
     {
         slider.value = health;
     }
 
-
-    public void setMaxHealth(int health)
+    public void setMaxHealth(float health)
     {
         slider.maxValue = health;
         slider.value = health;
     }
 
     // change max health without healing
-    public void changeMaxHealth(int health)
+    public void changeMaxHealth(float health)
     {
         slider.maxValue = health;
     }
 
-    public void takeDamage(int damage)
+    public void takeDamage(float damage)
     {
         slider.value -= damage;
         Debug.Log(damage);
         Debug.Log(slider.value);
-        //checkDeath();
     }
 
-    // public HealthBar getHealthBar(){
-    //     return this;
-    // }
-
-    private void Update()
-    {
-        //checkDeath();
-    }
     //This might just destroy the healthbar and not the enemy object. Should be placed in the enemy script I THINK
 
     // public void checkDeath(){

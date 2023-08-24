@@ -2,31 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicAIController : MonoBehaviour
+public class BasicAIController : MonoBehaviour, IDamageable
 {
-
     public enum Direction { right, left };
     public Direction enemyDirection = Direction.left;
-
     private SpriteRenderer enemySprite;
-
-    public int maxHealth = 100; // can probably get this number from somewhere else down the line
-    public int currentHealth;
     [SerializeField] private GameObject VisionCone;
     [SerializeField] private Transform fireTransform;
     [SerializeField] private GameObject bullet;
-
+    
+    public float maxHealth { get; set; } = 100f;
+    public float currentHealth { get; set; }
+    
     private float shotCooldown = 1.8f;
     private float lastTimeFired;
-
-    private float directionChangeCooldown = 6f;
-
     private Vector2 bulletVelocity = new Vector2(15f, 0);
-
+    
     private IEnumerator directionCoroutine;
-    //private int direction = 0;
-
-    // Start is called before the first frame update
+    private float directionChangeCooldown = 6f;
+    
     void Awake()
     {
         directionCoroutine = SwitchFacingDirection();
@@ -36,25 +30,9 @@ public class BasicAIController : MonoBehaviour
         enemySprite = this.GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-
         enemySprite.flipX = enemyDirection == Direction.left ? true : false;
-
-        //Get the health bar of the enemy. if the healthbar is 0 destroy the enemy
-        if (checkDeath())
-        {
-            //Debug.Log("Enemy Killed Baby");
-            Destroy(gameObject);
-        }
-    }
-
-    public bool checkDeath()
-    {
-        if (currentHealth <= 0)
-            return true;
-        return false;
     }
 
     private IEnumerator SwitchFacingDirection(){
@@ -73,9 +51,10 @@ public class BasicAIController : MonoBehaviour
         }
     }
 
+    #region bullet firing methods
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.layer == 3) // if player detected 
+        if (other.gameObject.layer == 3)
         {
             if (Time.time - lastTimeFired >= shotCooldown)
             {
@@ -97,11 +76,25 @@ public class BasicAIController : MonoBehaviour
         Rigidbody2D rbBulletInstance = bulletInstance.GetComponent<Rigidbody2D>();
         rbBulletInstance.velocity = velocity;
     }
+    #endregion
 
+    #region healthbar interface methods
+    public bool checkDeath()
+    {
+        if (currentHealth <= 0)
+            return true;
+        return false;
+    }
 
+    public void Death(){
+        if(checkDeath())
+            Destroy(gameObject);
+    }
 
-
-
-
+    public void Damage(float damageAmount){
+        currentHealth -= damageAmount;
+        Death();
+    }
+    #endregion
 
 }

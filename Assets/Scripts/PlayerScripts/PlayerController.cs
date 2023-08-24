@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamageable
 {
-
-    //private float distance = 10;
-
-    private SpriteRenderer playerSprite;
+   
 
     //COMPONENT GRAB
     private Rigidbody2D rb2D;
     private BoxCollider2D bc2D;
+    private SpriteRenderer playerSprite;
 
     //MOVEMENT BOOLEANS
     public bool grounded;
@@ -26,8 +24,8 @@ public class PlayerController : MonoBehaviour
 
     //HEALTH BAR
     public HealthBar healthBar;
-    public int maxHealth = 100;
-    public int currentHealth;
+    public float maxHealth { get; set; } = 100f;
+    public float currentHealth { get; set; }
 
     //COMBAT VARIABLES
     public Vector2 bulletVelocity = new Vector2(15f, 0f);
@@ -64,7 +62,7 @@ public class PlayerController : MonoBehaviour
         healthBar.setMaxHealth(maxHealth);
     }
 
-    // Update is called once per frame
+
     private void Update()
     {
 
@@ -76,25 +74,10 @@ public class PlayerController : MonoBehaviour
             bulletsRemaining = 9;
         }
 
-        healthBar.setHealth(currentHealth);
-        // update velocity based on horizontal component
         rb2D.velocity = new Vector2(horizontal * moveSpeed, rb2D.velocity.y);
-        // Smooth look up and down camera movements
         isMoving = rb2D.velocity != Vector2.zero;
-
-        if (checkDeath())
-        {
-            gameObject.SetActive(false);
-        }
     }
-
-    private bool checkDeath()
-    {
-        if (currentHealth <= 0)
-            return true;
-        return false;
-    }
-
+    #region ground collision detection
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == 6 && !grounded)
@@ -110,7 +93,9 @@ public class PlayerController : MonoBehaviour
             grounded = false;
         }
     }
+    #endregion
 
+    #region Input System(combat and movement)
     public void Move(InputAction.CallbackContext context)
     {
         if (Mathf.Abs(context.ReadValue<Vector2>().y) > verticalDeadzone)
@@ -188,4 +173,25 @@ public class PlayerController : MonoBehaviour
         Rigidbody2D rbBulletInstance = bulletInstance.GetComponent<Rigidbody2D>();
         rbBulletInstance.velocity = velocity;
     }
+    #endregion
+
+    #region healthbar interface methods
+    public void Damage(float damageAmount){
+        currentHealth -= damageAmount;
+        healthBar.updateHealth(currentHealth);
+        Death();
+    }
+
+    public bool checkDeath(){
+        if(currentHealth <= 0)
+            return true;
+        return false;
+    }
+
+    public void Death(){
+        if(checkDeath())
+            gameObject.SetActive(false);
+    }
+    #endregion
+    
 }

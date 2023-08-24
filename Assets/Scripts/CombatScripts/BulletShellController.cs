@@ -44,7 +44,7 @@ public class BulletShellController : MonoBehaviour
 
             if (ai.gameObject.layer == EnemyLMask)
             {
-                ai.currentHealth -= Damage;
+                ai.Damage(Damage);
             }
         }
         else if (origin == OriginObject.enemy)
@@ -56,7 +56,7 @@ public class BulletShellController : MonoBehaviour
 
             if (pc.gameObject.layer == PlayerLMask)
             {
-                pc.currentHealth -= Damage;
+                pc.Damage(Damage);
             }
         }
 
