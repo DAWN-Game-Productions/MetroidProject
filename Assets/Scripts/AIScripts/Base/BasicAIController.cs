@@ -10,6 +10,8 @@ public class BasicAIController : MonoBehaviour, IDamageable
     [SerializeField] private GameObject VisionCone;
     [SerializeField] private Transform fireTransform;
     [SerializeField] private GameObject bullet;
+    private float scaleX;
+    private float coneScaleX;
     
     public float maxHealth { get; set; } = 100f;
     public float currentHealth { get; set; }
@@ -19,10 +21,12 @@ public class BasicAIController : MonoBehaviour, IDamageable
     private Vector2 bulletVelocity = new Vector2(15f, 0);
     
     private IEnumerator directionCoroutine;
-    private float directionChangeCooldown = 6f;
+    private float directionChangeCooldown = 4.5f;
     
     void Awake()
     {
+        coneScaleX = VisionCone.transform.localScale.x;
+        scaleX = transform.localScale.x;
         directionCoroutine = SwitchFacingDirection();
         StartCoroutine(directionCoroutine);
         currentHealth = maxHealth;
@@ -32,20 +36,17 @@ public class BasicAIController : MonoBehaviour, IDamageable
 
     void Update()
     {
-        enemySprite.flipX = enemyDirection == Direction.left ? true : false;
+        transform.localScale = new Vector3((enemyDirection == Direction.right ? -scaleX : scaleX), transform.localScale.y, transform.localScale.z);
+        VisionCone.transform.localScale = new Vector3((enemyDirection == Direction.right ? -coneScaleX : coneScaleX), VisionCone.transform.localScale.y, VisionCone.transform.localScale.z);
     }
 
     private IEnumerator SwitchFacingDirection(){
         while(true){
             yield return new WaitForSeconds(directionChangeCooldown);
             if(enemyDirection == Direction.left){
-                fireTransform.localPosition = new Vector3(-fireTransform.localPosition.x, fireTransform.localPosition.y, fireTransform.localPosition.z);
-                VisionCone.transform.localPosition = new Vector3(-VisionCone.transform.localPosition.x, VisionCone.transform.localPosition.y, VisionCone.transform.localPosition.z);
                 enemyDirection = Direction.right;
             }
             else{
-                fireTransform.localPosition = new Vector3(-fireTransform.localPosition.x, fireTransform.localPosition.y, fireTransform.localPosition.z);
-                VisionCone.transform.localPosition = new Vector3(-VisionCone.transform.localPosition.x, VisionCone.transform.localPosition.y, VisionCone.transform.localPosition.z);
                 enemyDirection = Direction.left;
             }
         }
