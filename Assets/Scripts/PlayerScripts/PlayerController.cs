@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     private float moveSpeed = 10f;
     private float jumpVelocity = 10f;
     private float verticalDeadzone = 0.6f;
+    private float scaleX;
 
     //HEALTH BAR
     public HealthBar healthBar;
@@ -50,7 +51,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     private void Awake()
     {
-
+        scaleX = transform.localScale.x;
         playerSprite = this.GetComponent<SpriteRenderer>();
 
         rb2D = transform.GetComponent<Rigidbody2D>();
@@ -65,8 +66,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     private void Update()
     {
-
-        playerSprite.flipX = playerDirection == Direction.right ? true : false;
+        transform.localScale = new Vector3((playerDirection == Direction.right ? scaleX : -scaleX), transform.localScale.y, transform.localScale.z);
 
         if ((Time.time - FireTime) > 1f && isReloaded == false)
         {
@@ -107,12 +107,10 @@ public class PlayerController : MonoBehaviour, IDamageable
             horizontal = context.ReadValue<Vector2>().x;
             if (context.ReadValue<Vector2>().x > 0 && playerDirection != Direction.right)
             {
-                setFireTransform();
                 playerDirection = Direction.right;
             }
             else if (context.ReadValue<Vector2>().x < 0 && playerDirection != Direction.left)
             {
-                setFireTransform();
                 playerDirection = Direction.left;
             }
             else if (context.ReadValue<Vector2>().x == 0 && playerDirection == Direction.right)
@@ -124,10 +122,6 @@ public class PlayerController : MonoBehaviour, IDamageable
                 playerDirection = Direction.left;
             }
         }
-    }
-
-    public void setFireTransform(){
-        fireTransform.localPosition = new Vector3(-fireTransform.localPosition.x, fireTransform.localPosition.y, fireTransform.localPosition.z);
     }
 
     public void Jump(InputAction.CallbackContext context)
