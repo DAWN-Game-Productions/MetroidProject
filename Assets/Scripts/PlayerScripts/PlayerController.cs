@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamageable
 {
-
-    //private float distance = 10;
-
-    private SpriteRenderer playerSprite;
+   
 
     //COMPONENT GRAB
     private Rigidbody2D rb2D;
     private BoxCollider2D bc2D;
+    private SpriteRenderer playerSprite;
 
     //MOVEMENT BOOLEANS
     public bool grounded;
@@ -26,8 +24,8 @@ public class PlayerController : MonoBehaviour
 
     //HEALTH BAR
     public HealthBar healthBar;
-    public int maxHealth = 100;
-    public int currentHealth;
+    public float maxHealth { get; set; } = 100f;
+    public float currentHealth { get; set; }
 
     //COMBAT VARIABLES
     public Vector2 bulletVelocity = new Vector2(15f, 0f);
@@ -46,8 +44,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Camera mainCam;
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject bullet;
-    [SerializeField] private Transform fireTransR;
-    [SerializeField] private Transform fireTransL;
+    [SerializeField] private Transform fireTransform;
+    //[SerializeField] private Transform fireTransL;
 
 
     private void Awake()
@@ -64,7 +62,7 @@ public class PlayerController : MonoBehaviour
         healthBar.setMaxHealth(maxHealth);
     }
 
-    // Update is called once per frame
+
     private void Update()
     {
 
@@ -76,14 +74,10 @@ public class PlayerController : MonoBehaviour
             bulletsRemaining = 9;
         }
 
-        healthBar.setHealth(currentHealth);
-        // update velocity based on horizontal component
         rb2D.velocity = new Vector2(horizontal * moveSpeed, rb2D.velocity.y);
-        // Smooth look up and down camera movements
         isMoving = rb2D.velocity != Vector2.zero;
-
     }
-
+    #region ground collision detection
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == 6 && !grounded)
@@ -99,7 +93,9 @@ public class PlayerController : MonoBehaviour
             grounded = false;
         }
     }
+    #endregion
 
+    #region Input System(combat and movement)
     public void Move(InputAction.CallbackContext context)
     {
         if (Mathf.Abs(context.ReadValue<Vector2>().y) > verticalDeadzone)
@@ -109,12 +105,14 @@ public class PlayerController : MonoBehaviour
         else
         {
             horizontal = context.ReadValue<Vector2>().x;
-            if (context.ReadValue<Vector2>().x > 0)
+            if (context.ReadValue<Vector2>().x > 0 && playerDirection != Direction.right)
             {
+                setFireTransform();
                 playerDirection = Direction.right;
             }
-            else if (context.ReadValue<Vector2>().x < 0)
+            else if (context.ReadValue<Vector2>().x < 0 && playerDirection != Direction.left)
             {
+                setFireTransform();
                 playerDirection = Direction.left;
             }
             else if (context.ReadValue<Vector2>().x == 0 && playerDirection == Direction.right)
@@ -126,6 +124,10 @@ public class PlayerController : MonoBehaviour
                 playerDirection = Direction.left;
             }
         }
+    }
+
+    public void setFireTransform(){
+        fireTransform.localPosition = new Vector3(-fireTransform.localPosition.x, fireTransform.localPosition.y, fireTransform.localPosition.z);
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -160,11 +162,11 @@ public class PlayerController : MonoBehaviour
             {
                 if (playerDirection == Direction.right)
                 {
-                    instantiateBullet(bullet, fireTransR.position, bulletVelocity);
+                    instantiateBullet(bullet, fireTransform.position, bulletVelocity);
                 }
                 else if (playerDirection == Direction.left)
                 {
-                    instantiateBullet(bullet, fireTransL.position, -bulletVelocity);
+                    instantiateBullet(bullet, fireTransform.position, -bulletVelocity);
                 }
             }
         }
@@ -173,7 +175,29 @@ public class PlayerController : MonoBehaviour
     private void instantiateBullet(GameObject bullet, Vector3 position, Vector2 velocity)
     {
         GameObject bulletInstance = Instantiate(bullet, position, Quaternion.Euler(0, 0, 90));
+        bulletInstance.GetComponent<BulletShellController>().setOrigin(1);
         Rigidbody2D rbBulletInstance = bulletInstance.GetComponent<Rigidbody2D>();
         rbBulletInstance.velocity = velocity;
     }
+    #endregion
+
+    #region healthbar interface methods
+    public void Damage(float damageAmount){
+        currentHealth -= damageAmount;
+        healthBar.updateHealth(currentHealth);
+        Death();
+    }
+
+    public bool checkDeath(){
+        if(currentHealth <= 0)
+            return true;
+        return false;
+    }
+
+    public void Death(){
+        if(checkDeath())
+            gameObject.SetActive(false);
+    }
+    #endregion
+    
 }

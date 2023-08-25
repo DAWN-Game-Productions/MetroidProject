@@ -9,13 +9,13 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Post-Processing
+  - Player
   - Water
   - UI
   - Ground
   - Enemy
   - Walls
-  - 
+  - Post-Processing
   - 
   - 
   - 
